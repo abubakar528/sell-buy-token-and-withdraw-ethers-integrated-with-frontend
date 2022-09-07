@@ -119,6 +119,31 @@ useEffect(()=>{
     
   }
   
+  const withDraw=async()=>{
+    
+    const provider = new ethers.providers.Web3Provider(window.ethereum);
+    let dollar;
+    dollar = new ethers.Contract(
+      "0xcdDE91494F756194866304dE60186d3ffA7bFB6C",
+      abi,
+      provider
+    );
+    const signer = await provider.getSigner();
+    const addressofUser = await signer.getAddress()
+    console.log("add of USER",addressofUser);
+    console.log("Signer",window.ethereum.selectedAddress);
+    if(addressofUser!==owner){
+      alert("caller in not owner")
+    }
+    else{
+      const Contract = dollar.connect(signer);
+      setLoading(true); 
+      await Contract.withdraw().then((res =>{
+      })).catch((err)=>{
+        console.log("this is error", err)
+      });
+    }
+  }
 
 
 
@@ -142,6 +167,8 @@ useEffect(()=>{
             <h2>sell token</h2>
             <input placeholder='enter amount' id='sell1'></input>
               <button className="btn btn-primary" id="sellBtn"  onClick={sellToken}>SellToken</button>
+
+              <button id="wdrBtn" onClick={withDraw} className="btn btn-danger">withdrawEthers</button>
             </div>
             <div id="right2">
 
